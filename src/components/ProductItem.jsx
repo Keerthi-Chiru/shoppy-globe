@@ -1,5 +1,6 @@
 import { addItem } from "../utils/cartSlice";  // Import action to add item to cart in Redux
 import { useDispatch } from "react-redux";    // Hook to dispatch Redux actions
+import { Link } from "react-router";
 
 export default function ProductItem({ product }) {
     const dispatch = useDispatch();  // Initialize dispatch function
@@ -31,7 +32,7 @@ export default function ProductItem({ product }) {
                 {/* Product image */}
                 <img
                     src={product.images[0]}
-                    alt={product.name}
+                    alt={product.title}
                     className="w-40 h-40 object-cover"
                 />
                 
@@ -49,14 +50,15 @@ export default function ProductItem({ product }) {
                 {/* Product rating */}
                 <div className="text-lg text-black mb-2">★{product.rating}</div>
 
-                {/*
+
                 <button
                     className="mt-1 bg-[#a5dc69] border border-black px-4 py-2 rounded-2xl shadow-xl hover:scale-105 transition-transform duration-50 ease-in-out active:scale-90"
                     onClick={handleClick}
                 >
                     Add to Cart
                 </button>
-                */}
+                <Link to={`/product/${product.id}`} key={product.id} className="border m-2 p-1 ">See More</Link>
+
             </div>
         </>
     );

@@ -98,7 +98,7 @@ export default function ProductDetail() {
 
       {/* Link to go back to Home page */}
       <Link to="/" className="mt-7 bg-[#78d2fa] p-2 border rounded-2xl">
-        GO Back
+        Go Back
       </Link>
     </div>
   );

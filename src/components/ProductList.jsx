@@ -1,17 +1,42 @@
-import ProductItem from './ProductItem';
-// Change this to 'react-router-dom' for typical React Router usage in web apps
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import ProductItem from './ProductItem';
 
 export default function ProductList({ products }) {
-    return (
-        // Container with grid layout for products, responsive columns, padding, and background color
-        <div className="product-list grid grid-cols-1 items-center justify-center w-auto m-auto pl-25 pb-10 pt-10 bg-[#a5dc69]/100 md:grid-cols-2 lg:grid-cols-3 lg:pt-15 gap-10 px-10 pointer">
-            {products.map((product) => (
-                // Each product wrapped in a Link to the product details page using product id as param
-                <Link to={`/product/${product.id}`} key={product.id}>
-                    <ProductItem product={product} />
-                </Link>
-            ))}
-        </div>
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filteredProducts, setFilteredProducts] = useState(products);
+
+  // Update filteredProducts whenever products or searchTerm changes
+  useEffect(() => {
+    const filtered = products.filter((product) =>
+      product.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
+    setFilteredProducts(filtered);
+  }, [searchTerm, products]);
+
+  return (
+    <div className="bg-[#a5dc69]/100 flex justify-center items-center flex-col">
+      {/* Search Input Field */}
+      <input
+        type="text"
+        placeholder="Search Products..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        className="input bg-white border-2 my-4 w-80 p-2 rounded-xl shadow-md text-center"
+      />
+
+
+      <div className="product-list grid grid-cols-1 items-center justify-center w-auto m-auto pb-10 pt-5 bg-[#a5dc69]/100 md:grid-cols-2 lg:grid-cols-3 gap-10 px-10">
+        {filteredProducts.length > 0 ? (
+          filteredProducts.map((product) => (
+            
+              <ProductItem key={product.id} product={product} />
+
+          ))
+        ) : (
+          <p className="text-xl text-red-600 font-semibold mt-5">No products found.</p>
+        )}
+      </div>
+    </div>
+  );
 }
