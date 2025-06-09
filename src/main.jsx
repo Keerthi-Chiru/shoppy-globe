@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import App from './App.jsx';
 import './index.css';
-import Error from './components/Error.jsx'; // error page usually kept outside suspense
+import NotFound from './components/NotFound.jsx'; // error page usually kept outside suspense
 
 // Lazy-loaded components
 const Home = lazy(() => import('./components/Home.jsx'));
