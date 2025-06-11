@@ -26,21 +26,22 @@ export default function Cart() {
 
     // Render list of cart items and a Clear Cart button
     return (
-        <div className="mt-10">
+        
+        <div className="mt-1 mb-5">
+            <div className="justify-center flex items-center">
+            <button className="bg-[#78d2fa] rounded-md hover:bg-blue-600 transition-colors duration-200 p-2 items-center my-10" onClick={handleClear}>
+                    Clear Cart 
+            </button> 
+            </div>
             {/* Map through cart items and render a CartItem component for each */}
             {cartItems.map((item) => (
                 <CartItem key={item.id} product={item} />
             ))}
 
             {/* Button to clear the entire cart */}
-            <div className="justify-center flex items-center">
-                <button
-                    className="bg-[#78d2fa] rounded-md hover:bg-blue-600 transition-colors duration-200 p-2 items-center my-10"
-                    onClick={handleClear}
-                >
-                    Clear Cart 
-                </button> 
-            </div>
+            
+
+
         </div>
     );
 }

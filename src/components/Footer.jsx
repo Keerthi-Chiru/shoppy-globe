@@ -1,3 +1,6 @@
+import { Link } from "react-router";
+
+
 export default function Footer() {
     return (
         // Footer section with blue background, black text, padding, centered text, and strong shadow
@@ -12,9 +15,9 @@ export default function Footer() {
                 {/* Navigation links with margin top and horizontal spacing */}
                 <div className="mt-2">
                     {/* Anchor links with horizontal margin and underline on hover */}
-                    <a href="#home" className="mx-2 hover:underline">Home</a>
-                    <a href="#about" className="mx-2 hover:underline">About Us</a>
-                    <a href="#contact" className="mx-2 hover:underline">Contact</a>
+                    <Link to="/" className="mx-2 hover:underline">Home</Link>
+                    <Link to="/about" className="mx-2 hover:underline">About Us</Link>
+                    <Link to="/contact" className="mx-2 hover:underline">Contact</Link>
                 </div>
             </div>
         </footer>

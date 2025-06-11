@@ -1,105 +1,46 @@
-// React Router hook to get dynamic route params (product ID)
-import { useParams, Link } from "react-router-dom";
-
-// Custom hook to fetch product data from API
-import { useFetch } from "../utils/useFetch";
-
-// Redux hooks to dispatch an action
 import { useDispatch } from "react-redux";
-import { addItem } from "../utils/cartSlice";
+import { removeItem } from "../utils/cartSlice"; // Redux action to remove an item from cart
 
-export default function ProductDetail() {
-  // Fetch product data from API
-  const fetched = useFetch("https://dummyjson.com/products");
 
-  // Get the product ID from the URL
-  const { id } = useParams();
+export default function CartItem({ product }) {
+  // Calculate total price for the item based on its quantity
+  const totalPrice = product.price * product.quantity;
 
-  // Initialize Redux dispatch
+  // Get dispatch function to trigger Redux actions
   const dispatch = useDispatch();
 
-  // Handle adding the product to the cart
+  // Handler function to remove one quantity of this item from the cart
   function handleClick() {
-    console.log("Button clicked for product:", product.id);
-
-    // Construct the item object to be added to the cart
-    const item = {
-      id: product.id,
-      title: product.title,
-      price: product.price - (product.discountPercentage / 100) * product.price,
-      quantity: 1,
-      image: product.images[0],
-    };
-
-    dispatch(addItem(item)); // Dispatch action to update Redux store
-    alert("Item added to cart successfully!");
+    dispatch(removeItem(product.id));
   }
-
-  // Show loading screen while fetching data
-  if (fetched.loading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <h1 className="text-2xl font-bold">Loading...</h1>
-      </div>
-    );
-  }
-
-  // Show error message if fetch fails
-  if (fetched.error) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <h1 className="text-2xl font-bold text-red-500">Error: {fetched.error}</h1>
-      </div>
-    );
-  }
-
-  // Find the specific product from fetched data
-  const product = fetched.data.products.find(p => p.id === parseInt(id));
 
   return (
-    <div className="justify-center flex-col items-center flex h-auto lg:py-15 bg-[#a5dc69]/100">
-      {/* Product detail card */}
-      <div className="product-detail flex w-300 items-center h-120 bg-white shadow-2xl rounded-2xl">
+    <div className="flex justify-center">
+      {/* Cart item container */}
+      <div className="grid grid-cols-2 items-center p-6 border-b w-150 bg-[#a5dc69]">
         {/* Product image */}
         <img
-          src={product.images[0]}
+          src={product.images}
           alt={product.title}
-          className="w-120 h-120 object-cover mb-4 rounded"
+          className="w-30 h-30 object-cover rounded-md"
         />
 
-        {/* Product details and Add to Cart */}
-        <div className="bg-[#78d2fa] h-full flex flex-col justify-between p-10 px-15 items-center rounded-r-2xl">
-          <h2 className="text-2xl font-bold mb-2">{product.title}</h2>
-          <p className="mb-4">{product.description}</p>
-          <p className="mb-4 underline">{product.availabilityStatus}</p>
+        {/* Product details */}
+        <div className="flex flex-col ml-4">
+          <h2 className="text-lg font-semibold">{product.title}</h2>
+          <p className="">Price: ₹{product.price.toFixed(2)}</p>
+          <p className="">Quantity: {product.quantity}</p>
+          <p className="">Total: ₹{totalPrice.toFixed(2)}</p>
 
-          {/* Price section */}
-          <div className="flex gap-6">
-            <div className="text-4xl font-bold text-green-600">
-              ${((product.price - (product.discountPercentage / 100) * product.price)).toFixed(2)}
-            </div>
-            <span className="text-2xl font-bold text-green-600 line-through">
-              ${product.price}
-            </span>
-          </div>
-
-          {/* Rating and Cart Button */}
-          <div className="flex gap-x-10 items-center justify-between">
-            <div className="text-xl text-black">★{product.rating}</div>
-            <button
-              className="px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-300"
-              onClick={handleClick}
-            >
-              Add to Cart
-            </button>
-          </div>
+          {/* Remove button */}
+          <button
+            className="mt-2 bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition-colors duration-200"
+            onClick={handleClick}
+          >
+            Remove
+          </button>
         </div>
       </div>
-
-      {/* Link to go back to Home page */}
-      <Link to="/" className="mt-7 bg-[#78d2fa] p-2 border rounded-2xl">
-        Go Back
-      </Link>
     </div>
   );
 }

@@ -39,18 +39,24 @@ const cartSlice = createSlice({
 
         // Remove an item completely from the cart by ID
         removeItem(state, action) {
-            const id = action.payload;
-            const existingItem = state.items.find(item => item.id === id);
+  const id = action.payload;
+  const existingItem = state.items.find(item => item.id === id);
 
-            if (existingItem) {
-                // Deduct the item's quantity and price from the totals
-                state.totalQuantity -= existingItem.quantity;
-                state.totalPrice -= existingItem.totalPrice;
+  if (existingItem) {
+    // Decrease quantity and totalPrice
+    existingItem.quantity -= 1;
+    existingItem.totalPrice -= existingItem.price;
 
-                // Remove the item from the items array
-                state.items = state.items.filter(item => item.id !== id);
-            }
-        },
+    // Also update global totals
+    state.totalQuantity -= 1;
+    state.totalPrice -= existingItem.price;
+
+    // If quantity becomes 0, remove the item from the cart
+    if (existingItem.quantity === 0) {
+      state.items = state.items.filter(item => item.id !== id);
+    }
+  }
+},
 
         // Clear the entire cart
         clearCart(state) {
