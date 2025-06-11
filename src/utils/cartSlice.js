@@ -1,13 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+// Get cart from sessionStorage if available
+const savedCart = JSON.parse(sessionStorage.getItem("cart"));
+
+const initialState = savedCart || {
+  items: [],
+  totalQuantity: 0,
+  totalPrice: 0,
+};
+
 // Create the cart slice to manage cart state and actions
 const cartSlice = createSlice({
     name: "cart",
-    initialState: {
-        items: [],          // Array of cart items
-        totalQuantity: 0,   // Total number of items in the cart
-        totalPrice: 0,      // Total price of all items combined
-    },
+    initialState,
+
     reducers: {
         // Add an item to the cart or update quantity if it already exists
         addItem(state, action) {
@@ -33,7 +39,7 @@ const cartSlice = createSlice({
             // Update the overall cart totals
             state.totalQuantity += quantity;
             state.totalPrice += newItem.price * quantity;
-
+            sessionStorage.setItem("cart", JSON.stringify(state));
             console.log("Updated total quantity:", state.totalQuantity);
         },
 
@@ -56,6 +62,7 @@ const cartSlice = createSlice({
       state.items = state.items.filter(item => item.id !== id);
     }
   }
+  sessionStorage.setItem("cart", JSON.stringify(state));
 },
 
         // Clear the entire cart
@@ -63,6 +70,8 @@ const cartSlice = createSlice({
             state.items = [];
             state.totalQuantity = 0;
             state.totalPrice = 0;
+
+            sessionStorage.setItem("cart", JSON.stringify(state));
         }
     }
 });

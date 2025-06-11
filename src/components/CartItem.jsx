@@ -3,6 +3,8 @@ import { removeItem } from "../utils/cartSlice"; // Redux action to remove an it
 
 
 export default function CartItem({ product }) {
+
+
   // Calculate total price for the item based on its quantity
   const totalPrice = product.price * product.quantity;
 
